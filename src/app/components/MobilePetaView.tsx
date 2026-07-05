@@ -3,7 +3,7 @@ import {
   Search, Navigation, Car, Fuel, ArrowLeft,
   ChevronRight, MapPin, Gauge, Plus, Minus,
   Coffee, Bath, ShoppingBag, CreditCard, Wind, Droplets,
-  History, Star, CheckCircle, Check, MessageSquare, User, Edit2, Trash2, X, Moon
+  History, Star, CheckCircle, Check, MessageSquare, User, Trash2, X, Moon
 } from "lucide-react";
 
 /* ── Token identik dengan App.tsx ─────────────────────────────────── */
@@ -484,9 +484,6 @@ function SpbuDetail({
                   </div>
                   {u.isMine && (
                     <>
-                      <button onClick={() => { setEditId(u.id); setFormText(u.c); setFormRating(u.r); setIsFormOpen(true); }} style={{ background: "none", border: "none", color: MC.sub, cursor: "pointer", padding: 4 }}>
-                        <Edit2 size={14} />
-                      </button>
                       <button onClick={() => {
                         const newReviews = reviews.filter(r => r.id !== u.id);
                         REVIEWS_STORE[pin.l] = newReviews;

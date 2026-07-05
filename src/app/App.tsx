@@ -7,7 +7,7 @@ import {
   Mail, Lock, UserCircle2, Radar,
   Settings, HelpCircle, Phone, Calendar,
   Filter, Star, CheckCircle2, Clock, Car, Activity, Gauge, MapPin,
-  Edit2, Trash2, MessageSquare, BadgeCheck, RefreshCw, Megaphone, Video, Radio, AlertTriangle, Download, ChevronDown, Sun, Moon, Camera, Maximize
+  Trash2, MessageSquare, BadgeCheck, RefreshCw, Megaphone, Video, Radio, AlertTriangle, Download, ChevronDown, Sun, Moon, Camera, Maximize
 } from "lucide-react";
 import { MobilePetaView } from "./components/MobilePetaView";
 import {
@@ -1081,9 +1081,6 @@ function SpbuDetailSide({ go, close, pin }: { go: (s: Screen) => void; close: ()
                   </div>
                   {u.isMine && (
                     <>
-                      <button onClick={() => { setEditId(u.id); setFormText(u.c); setFormRating(u.r); setIsFormOpen(true); }} style={{ background: "none", border: "none", color: C.sub, cursor: "pointer", padding: 4 }}>
-                        <Edit2 size={14} />
-                      </button>
                       <button onClick={() => {
                         const newReviews = reviews.filter(r => r.id !== u.id);
                         REVIEWS_STORE[pin.l] = newReviews;
