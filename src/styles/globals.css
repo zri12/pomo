@@ -1,0 +1,71 @@
+/* Hide scrollbar on mobile views for all browsers */
+.pomo-scroll-hidden {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.pomo-scroll-hidden::-webkit-scrollbar {
+  display: none;
+}
+
+:root {
+  --pomo-navy: #0C324A;
+  --pomo-navy-deep: #06212F;
+  --pomo-blue: #0F414A;
+  --pomo-soft-blue: #679CBC;
+  --pomo-light-blue: #96C0CE;
+  --pomo-blue-pale: #DDEAF1;
+  --pomo-alabaster: #EFE8DF;
+  --pomo-cream: #FEF1D5;
+  --pomo-maroon: #7F0303;
+  --pomo-red: #C11720;
+  --pomo-red-pale: #FBE2E4;
+  --pomo-green: #00A78F;
+  --pomo-green-pale: #D8F1EC;
+  --pomo-yellow: #E5B505;
+  --pomo-yellow-pale: #FEF1D5;
+  --pomo-orange: #E07A1F;
+  --pomo-orange-pale: #F6DEC4;
+  --pomo-ink: #1B1F2A;
+  --pomo-sub: #6F6256;
+  --pomo-line: #E4DCCE;
+  --pomo-bg: #EFE8DF;
+  
+  --pomo-card: #ffffff;
+  --pomo-white: #ffffff;
+  --pomo-black: #000000;
+}
+
+.dark {
+  --pomo-navy: #0096a5;
+  --pomo-navy-deep: #006166;
+  --pomo-blue: #548C92;
+  --pomo-soft-blue: #9bc6c0;
+  --pomo-light-blue: #b6dbe5;
+  --pomo-blue-pale: #1A3B47;
+  
+  --pomo-alabaster: #061A22;
+  --pomo-cream: #153240;
+  
+  --pomo-maroon: #6F2A38;
+  --pomo-red: #C55353;
+  --pomo-red-pale: #381A1F;
+  
+  --pomo-green: #208E96;
+  --pomo-green-pale: #0C3236;
+  
+  --pomo-yellow: #CBA16E;
+  --pomo-yellow-pale: #4A3A25;
+  
+  --pomo-orange: #AB9072;
+  --pomo-orange-pale: #3D3124;
+  
+  --pomo-ink: #E0D7CF;
+  --pomo-sub: #B4D7D8;
+  
+  --pomo-line: #285260;
+  --pomo-bg: #061A22;
+  
+  --pomo-card: #112833;
+  --pomo-white: #112833;
+  --pomo-black: #E2CDB5;
+}
