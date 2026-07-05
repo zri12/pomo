@@ -14,6 +14,7 @@ import {
   MobileMenuHome, MobileHistoriView, MobileBayarView,
   MobileNotifView, MobileProfilView,
 } from "./components/MobileViews";
+import { addReviewHistory, formatReviewDate, getReviewHistory, removeReviewHistory } from "./reviewHistory";
 
 /* =========================================================
    POMO · Pom Monitor — Web Dashboard
@@ -1085,6 +1086,7 @@ function SpbuDetailSide({ go, close, pin }: { go: (s: Screen) => void; close: ()
                         const newReviews = reviews.filter(r => r.id !== u.id);
                         REVIEWS_STORE[pin.l] = newReviews;
                         setReviews(newReviews);
+                        removeReviewHistory(u.id);
                       }} style={{ background: "none", border: "none", color: C.red, cursor: "pointer", padding: 4 }}>
                         <Trash2 size={14} />
                       </button>
@@ -1123,7 +1125,15 @@ function SpbuDetailSide({ go, close, pin }: { go: (s: Screen) => void; close: ()
                 if (editId) {
                   newReviews = newReviews.map(r => r.id === editId && r.isMine ? { ...r, c: formText, r: formRating } : r);
                 } else {
-                  newReviews.unshift({ id: Date.now().toString(), n: "Anda", r: formRating, c: formText, isMine: true });
+                  const newReview = { id: Date.now().toString(), n: "Anda", r: formRating, c: formText, isMine: true };
+                  newReviews.unshift(newReview);
+                  addReviewHistory({
+                    id: newReview.id,
+                    spbu: `SPBU ${pin.l}`,
+                    date: formatReviewDate(),
+                    rating: formRating,
+                    comment: formText,
+                  });
                 }
                 REVIEWS_STORE[pin.l] = newReviews;
                 setReviews(newReviews);
@@ -1572,13 +1582,10 @@ function ProfilPage({ go, askLogout }: any) {
         <Card>
           <div style={{ fontSize: 14, fontWeight: 800, color: C.ink, marginBottom: 16 }}>Riwayat Ulasan</div>
           <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-            {[
-              { spbu: "SPBU Pertamina Pasteur", date: "24 Jun 2026", rating: 5, comment: "Toilet sangat bersih dan antrean tidak terlalu panjang saat malam hari." },
-              { spbu: "SPBU Pertamina Cibeureum", date: "15 Jun 2026", rating: 4, comment: "Pelayanan cepat, tapi sayang stok Pertamax Turbo sedang kosong." },
-            ].map((u, i) => (
+            {getReviewHistory().map((u, i, list) => (
               <div key={i} style={{
-                paddingBottom: i === 1 ? 0 : 14,
-                borderBottom: i === 1 ? "none" : `1px solid ${C.line}`,
+                paddingBottom: i === list.length - 1 ? 0 : 14,
+                borderBottom: i === list.length - 1 ? "none" : `1px solid ${C.line}`,
               }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 8 }}>
                   <div>

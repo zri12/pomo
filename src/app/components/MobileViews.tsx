@@ -11,6 +11,7 @@ import {
   Star, LogOut, Radar, Sparkles,
 } from "lucide-react";
 import { MC, MFONT } from "./MobilePetaView";
+import { getReviewHistory } from "../reviewHistory";
 
 /* ── Shared micro-components ─────────────────────────────────────────── */
 function MBadge({ color, bg, children }: { color: string; bg: string; children: React.ReactNode }) {
@@ -585,13 +586,10 @@ export function MobileProfilView({
         <MCard style={{ marginBottom: 12 }}>
           <div style={{ fontSize: 13, fontWeight: 800, color: MC.ink, marginBottom: 12 }}>Riwayat Ulasan</div>
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-            {[
-              { spbu: "SPBU Pertamina Pasteur", date: "24 Jun 2026", rating: 5, comment: "Toilet sangat bersih dan antrean tidak terlalu panjang saat malam hari." },
-              { spbu: "SPBU Pertamina Cibeureum", date: "15 Jun 2026", rating: 4, comment: "Pelayanan cepat, tapi sayang stok Pertamax Turbo sedang kosong." },
-            ].map((u, i) => (
+            {getReviewHistory().map((u, i, list) => (
               <div key={i} style={{
-                paddingBottom: i === 1 ? 0 : 12,
-                borderBottom: i === 1 ? "none" : `1px solid ${MC.line}`,
+                paddingBottom: i === list.length - 1 ? 0 : 12,
+                borderBottom: i === list.length - 1 ? "none" : `1px solid ${MC.line}`,
               }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 6 }}>
                   <div>

@@ -5,6 +5,7 @@ import {
   Coffee, Bath, ShoppingBag, CreditCard, Wind, Droplets,
   History, Star, CheckCircle, Check, MessageSquare, User, Trash2, X, Moon
 } from "lucide-react";
+import { addReviewHistory, formatReviewDate, removeReviewHistory } from "../reviewHistory";
 
 /* ── Token identik dengan App.tsx ─────────────────────────────────── */
 export const MC = {
@@ -488,6 +489,7 @@ function SpbuDetail({
                         const newReviews = reviews.filter(r => r.id !== u.id);
                         REVIEWS_STORE[pin.l] = newReviews;
                         setReviews(newReviews);
+                        removeReviewHistory(u.id);
                       }} style={{ background: "none", border: "none", color: MC.red, cursor: "pointer", padding: 4 }}>
                         <Trash2 size={14} />
                       </button>
@@ -526,7 +528,15 @@ function SpbuDetail({
                 if (editId) {
                   newReviews = newReviews.map(r => r.id === editId && r.isMine ? { ...r, c: formText, r: formRating } : r);
                 } else {
-                  newReviews.unshift({ id: Date.now().toString(), n: "Budi Hartono", r: formRating, c: formText, isMine: true });
+                  const newReview = { id: Date.now().toString(), n: "Budi Hartono", r: formRating, c: formText, isMine: true };
+                  newReviews.unshift(newReview);
+                  addReviewHistory({
+                    id: newReview.id,
+                    spbu: `SPBU ${pin.l}`,
+                    date: formatReviewDate(),
+                    rating: formRating,
+                    comment: formText,
+                  });
                 }
                 REVIEWS_STORE[pin.l] = newReviews;
                 setReviews(newReviews);
