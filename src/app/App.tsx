@@ -1886,9 +1886,26 @@ function Dashboard({ current, go }: { current: Screen; go: (s: Screen) => void }
   );
 }
 
+const CCTV_CAMERAS = [
+  {
+    id: 1,
+    label: "Cam 1: Jalur Antrean Motor (Cimahi Main Road)",
+    overlayLabel: "CAM 1: Jalur Antrean Motor (Cimahi Main Road)",
+    src: "/antrean_pom.gif",
+  },
+  {
+    id: 2,
+    label: "Cam 2: Jalur Dispenser Mobil",
+    overlayLabel: "CAM 2: Jalur Dispenser Mobil",
+    src: "/pemantauan_pom.gif",
+  },
+] as const;
+
+type CctvCamId = (typeof CCTV_CAMERAS)[number]["id"];
+
 function AdminPage({ go }: { go: (s: Screen) => void }) {
   const [buka, setBuka] = useState(true);
-  const [cam, setCam] = useState(1);
+  const [cam, setCam] = useState<CctvCamId>(1);
   const [tab, setTab] = useState("dashboard");
   const [antrean, setAntrean] = useState("PANJANG");
   const [fasilitas, setFasilitas] = useState({ toilet: true, musholla: true, atm: true });
@@ -1909,6 +1926,11 @@ function AdminPage({ go }: { go: (s: Screen) => void }) {
   const [autoSync, setAutoSync] = useState(true);
   const [shiftOpen, setShiftOpen] = useState(false);
   const [shift, setShift] = useState("Shift Pagi (06:00 - 14:00)");
+  const activeCamera = CCTV_CAMERAS.find(camera => camera.id === cam) ?? CCTV_CAMERAS[0];
+  const selectCctvCamera = (id: CctvCamId) => {
+    setCam(id);
+    setCctvDropdownOpen(false);
+  };
 
   const historyData = [
     { k: "Sensor IoT (Tangki Bawah Tanah)", waktu: "08:15:22 WIB", kode: "ERR-TNK-01", sumber: "Sensor Tangki 1 (Pertalite)", desc: "Penurunan volume drastis 500L/menit (Indikasi Kebocoran / Error Sensor)", petugas: "Jojo Sucipto", status: "Critical" },
@@ -2024,12 +2046,31 @@ function AdminPage({ go }: { go: (s: Screen) => void }) {
                   backgroundSize: "100% 4px, 6px 100%", pointerEvents: "none", zIndex: 2
                 }} />
 
-                {/* CCTV Video feed */}
-                <img 
-                  src={cam === 1 ? "/antrean_pom.gif" : "/pemantauan_pom.gif"} 
-                  alt="CCTV Feed" 
-                  style={{ width: "100%", height: "100%", objectFit: "cover", opacity: 0.9 }} 
-                />
+                {/* CCTV Video feeds are preloaded and layered, so switching cameras is instant. */}
+                {CCTV_CAMERAS.map(camera => {
+                  const isActive = cam === camera.id;
+                  return (
+                    <img
+                      key={camera.id}
+                      src={camera.src}
+                      alt={`${camera.label} CCTV Feed`}
+                      loading="eager"
+                      decoding="async"
+                      draggable={false}
+                      style={{
+                        position: "absolute",
+                        inset: 0,
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "cover",
+                        opacity: isActive ? 0.9 : 0,
+                        visibility: isActive ? "visible" : "hidden",
+                        transition: "opacity 80ms linear",
+                        pointerEvents: "none",
+                      }}
+                    />
+                  );
+                })}
 
                 {/* Timestamp & Label overlays */}
                 <div style={{
@@ -2051,7 +2092,7 @@ function AdminPage({ go }: { go: (s: Screen) => void }) {
                   position: "absolute", bottom: 16, left: 16, background: "rgba(0,0,0,0.6)", color: "#fff",
                   fontSize: 13, fontWeight: 800, padding: "6px 12px", borderRadius: 6, zIndex: 4
                 }}>
-                  {cam === 1 ? "CAM 1: Jalur Antrean Motor (Cimahi Main Road)" : "CAM 2: Jalur Dispenser Mobil"}
+                  {activeCamera.overlayLabel}
                 </div>
               </div>
 
@@ -2078,18 +2119,16 @@ function AdminPage({ go }: { go: (s: Screen) => void }) {
                       background: "#161B22", border: "1px solid #30363D", borderRadius: 8, boxShadow: "0 10px 25px rgba(0,0,0,.5)",
                       padding: 6, zIndex: 50
                     }}>
-                      {[
-                        { id: 1, label: "Cam 1: Jalur Antrean Motor (Cimahi Main Road)" },
-                        { id: 2, label: "Cam 2: Jalur Dispenser Mobil" }
-                      ].map(option => {
+                      {CCTV_CAMERAS.map(option => {
                         const isActive = cam === option.id;
                         return (
                           <div 
                             key={option.id}
-                            onClick={() => {
-                              setCam(option.id);
-                              setCctvDropdownOpen(false);
+                            onPointerDown={(event) => {
+                              event.preventDefault();
+                              selectCctvCamera(option.id);
                             }}
+                            onClick={() => selectCctvCamera(option.id)}
                             style={{
                               display: "flex", alignItems: "center", justifyContent: "space-between",
                               padding: "10px 12px", borderRadius: 6, cursor: "pointer",
